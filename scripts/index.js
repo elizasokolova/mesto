@@ -1,7 +1,9 @@
 // Открытие и закрытие формы Popup
 const editButton = document.querySelector('.profile__edit-button');
-const closeButton = document.querySelector('.popup__close-button');
 const popup = document.querySelector('.popup');
+const closeButton = popup.querySelector('.popup__close-button');
+
+const formElement = popup.querySelector('.popup__form');
 
 // Присваивание имени и описания в форму
 const popupName = document.getElementById('name');
@@ -10,9 +12,9 @@ const profileAuthor = document.querySelector('.profile__author');
 const profileStatus = document.querySelector('.profile__status');
 
 function openPopup() {
-  popup.classList.add('popup_opened');
   popupName.value = profileAuthor.textContent;
   popupInfo.value = profileStatus.textContent;
+  popup.classList.add('popup_opened');
 }
 function closePopup() {
   popup.classList.remove('popup_opened');
@@ -22,7 +24,6 @@ editButton.addEventListener('click', openPopup);
 closeButton.addEventListener('click', closePopup);
 
 // Редактирование имени и информации
-const formElement = document.querySelector('.popup__form');
 
 function formSubmitHandler (evt) {
     evt.preventDefault();
