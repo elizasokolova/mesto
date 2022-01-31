@@ -2,7 +2,6 @@
 const editButton = document.querySelector('.profile__edit-button');
 const popup = document.querySelector('.popup');
 const closeButton = popup.querySelector('.popup__close-button');
-
 const formElement = popup.querySelector('.popup__form');
 
 // Присваивание имени и описания в форму
@@ -11,6 +10,7 @@ const popupInfo = document.getElementById('info');
 const profileAuthor = document.querySelector('.profile__author');
 const profileStatus = document.querySelector('.profile__status');
 
+// Открытие закрытие попап
 function openPopup() {
   popupName.value = profileAuthor.textContent;
   popupInfo.value = profileStatus.textContent;
