@@ -12,10 +12,7 @@
     margin: 30px 20px 30px auto;
 }
 
-.card__like-button:active{
-    background-image: url(../../../images/like-active.svg);
-}
-
 .card__like-button:hover{
     opacity: 0.5;
+    transform: scale(1.3);
 }

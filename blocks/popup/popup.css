@@ -10,5 +10,9 @@
     height: 100%;
     padding: 0;
     margin: 0;
-    display: none;
+    display: flex;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0);
+    transition: opacity .3s, visibility .3s;
 }
