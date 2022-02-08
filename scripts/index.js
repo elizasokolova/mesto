@@ -5,8 +5,8 @@ const popupCloseButton = popupEditProfile.querySelector('.popup__close-button');
 const popupEditForm = popupEditProfile.querySelector('.popup__form');
 
 // Присваивание имени и описания в форму
-const popupName = document.getElementById('name');
-const popupInfo = document.getElementById('info');
+const popupProfileName = document.getElementById('name');
+const popupProfileInfo = document.getElementById('info');
 const profileAuthor = document.querySelector('.profile__author');
 const profileStatus = document.querySelector('.profile__status');
 
@@ -15,6 +15,9 @@ const popupAddCardOpen = document.querySelector('.profile__add-button');
 const popupAddCard = document.querySelector('#popup-add');
 const popupAddCardClose = popupAddCard.querySelector('.popup__close-button');
 const popupAddCardForm = popupAddCard.querySelector('.popup__form');
+
+const newCardLink = document.getElementById('link');
+const newCardTitle = document.getElementById('title');
 
 // Массив карточек выведение
 const photoGrid = document.querySelector('.photo-grid');
@@ -39,8 +42,8 @@ function closePopup(element) {
 
 popupEditButton.addEventListener('click', () => {  // Открывает попап профиля, присваивая значения со страницы
   openPopup (popupEditProfile);
-  popupName.value = profileAuthor.textContent;
-  popupInfo.value = profileStatus.textContent;
+  popupProfileName.value = profileAuthor.textContent;
+  popupProfileInfo.value = profileStatus.textContent;
 });
 
 popupCloseButton.addEventListener('click', () => {  // Закрывает попап профиля
@@ -50,8 +53,8 @@ popupCloseButton.addEventListener('click', () => {  // Закрывает поп
 /** Редактирование имени и информации профиля */
 function redactProfileInfo (event) {
     event.preventDefault();
-    profileAuthor.textContent = popupName.value;
-    profileStatus.textContent = popupInfo.value;
+    profileAuthor.textContent = popupProfileName.value;
+    profileStatus.textContent = popupProfileInfo.value;
     closePopup(popupEditProfile);
 }
 popupEditForm.addEventListener('submit', redactProfileInfo); // Отправляет введенную инфу на страницу
@@ -67,10 +70,6 @@ function closeAddCardPopup() {
   closePopup (popupAddCard);
 }
 popupAddCardClose.addEventListener('click', closeAddCardPopup);
-
-
-const newCardLink = document.getElementById('link');
-const newCardTitle = document.getElementById('title');
 
 popupAddCardForm.addEventListener('submit', (event) => {  // Создает карточку из формы добавления
   event.preventDefault(); 
