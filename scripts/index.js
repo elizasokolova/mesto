@@ -1,35 +1,8 @@
-const initialCards = [
-  {
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  }
-];
-
 // Открытие и закрытие формы Popup
-const editButton = document.querySelector('.profile__edit-button');
+const popupEditButton = document.querySelector('.profile__edit-button');
 const popupEditProfile = document.querySelector('#popup-profile');
-const closeButton = popupEditProfile.querySelector('.popup__close-button');
-const formElement = popupEditProfile.querySelector('.popup__form');
+const popupCloseButton = popupEditProfile.querySelector('.popup__close-button');
+const popupEditForm = popupEditProfile.querySelector('.popup__form');
 
 // Присваивание имени и описания в форму
 const popupName = document.getElementById('name');
@@ -64,24 +37,24 @@ function closePopup(element) {
 }
 ////////////////////////////////////////////////////
 
-editButton.addEventListener('click', () => {  // Открывает попап профиля, присваивая значения со страницы
+popupEditButton.addEventListener('click', () => {  // Открывает попап профиля, присваивая значения со страницы
   openPopup (popupEditProfile);
   popupName.value = profileAuthor.textContent;
   popupInfo.value = profileStatus.textContent;
 });
 
-closeButton.addEventListener('click', () => {  // Закрывает попап профиля
+popupCloseButton.addEventListener('click', () => {  // Закрывает попап профиля
   closePopup (popupEditProfile);
 });
 
 /** Редактирование имени и информации профиля */
-function formSubmitHandler (event) {
+function redactProfileInfo (event) {
     event.preventDefault();
     profileAuthor.textContent = popupName.value;
     profileStatus.textContent = popupInfo.value;
     closePopup(popupEditProfile);
 }
-formElement.addEventListener('submit', formSubmitHandler); // Отправляет введенную инфу на страницу
+popupEditForm.addEventListener('submit', redactProfileInfo); // Отправляет введенную инфу на страницу
 ///////////////////////////////////////////////////////
 // Создание новой карты
 popupAddCardOpen.addEventListener('click', () => {  // Открытие попапа добавления карты
@@ -95,14 +68,16 @@ function closeAddCardPopup() {
 }
 popupAddCardClose.addEventListener('click', closeAddCardPopup);
 
+
+const newCardLink = document.getElementById('link');
+const newCardTitle = document.getElementById('title');
+
 popupAddCardForm.addEventListener('submit', (event) => {  // Создает карточку из формы добавления
   event.preventDefault(); 
-  const addCardLink = document.getElementById('link');
-  const addCardTitle = document.getElementById('title');
 // Создаем объект, который получает на вход введенные данные и передаем в функцию создания карты
   renderItem({
-    name: addCardTitle.value,
-    link: addCardLink.value,
+    name: newCardTitle.value,
+    link: newCardLink.value,
   });
 
   closeAddCardPopup();
