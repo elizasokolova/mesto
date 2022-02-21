@@ -38,8 +38,10 @@
             <button class="popup__close-button" type="button" aria-label="Закрыть"></button>
             <form name="popup_form-edit" class="popup__form" id="popup_form-edit">
                 <h2 class="popup__edit">Редактировать профиль</h2>
-                <input name="name" id="name" type="text" value required placeholder="Имя" class="popup__edit-area">
-                <input name="info" id="info" type="text" value required placeholder="Описание" class="popup__edit-area">
+                <input name="name" id="name" type="text" value minlength="2" maxlength="40" required placeholder="Имя" class="popup__edit-area">
+                <span class="popup__error" id="popup__name-error"></span>
+                <input name="info" id="info" type="text" value minlength="2" maxlength="200" required placeholder="Описание" class="popup__edit-area">
+                <span class="popup__error" id="popup__info-error"></span>
                 <button class="popup__save-button" type="submit" aria-label="Сохранить">Сохранить</button> 
             </form>
         </div>
@@ -50,8 +52,10 @@
             <button class="popup__close-button" type="button" aria-label="Закрыть"></button>
             <form name="popup_form-add" class="popup__form" id="popup_form-add">
                 <h2 class="popup__edit">Новое место</h2>
-                <input name="title" id="title" type="text" value required placeholder="Название" class="popup__edit-area">
-                <input name="link" id="link" type="text" value required placeholder="Ссылка на картинку" class="popup__edit-area">
+                <input name="title" id="title" type="text" value minlength="2" maxlength="30" required placeholder="Название" class="popup__edit-area">
+                <span class="popup__error" id="popup__title-error"></span>
+                <input name="link" id="link" type="url" value required placeholder="Ссылка на картинку" class="popup__edit-area">
+                <span class="popup__error" id="popup__link-error"></span>
                 <button class="popup__save-button" type="submit" aria-label="Сохранить">Создать</button> 
             </form>
         </div>
@@ -74,6 +78,7 @@
         </article>
     </template>
 
+    <script src="./scripts/validate.js"></script>
     <script src="./scripts/cards.js"></script>
     <script src="./scripts/index.js"></script>
 </body>

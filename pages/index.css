@@ -48,3 +48,7 @@
 @import url(../blocks/popup/__full-container/popup__full-container.css);
 @import url(../blocks/popup/__full-img/popup__full-img.css);
 @import url(../blocks/popup/__full-img-name/popup__full-img-name.css);
+
+/* Валидация */
+@import url(../blocks/popup/__error/popup__error.css);
+@import url(../blocks/popup/__save-button/_invalid/popup__save-button_invalid.css);

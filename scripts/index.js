@@ -1,8 +1,8 @@
 // Открытие и закрытие формы Popup
 const popupEditButton = document.querySelector('.profile__edit-button');
 const popupEditProfile = document.querySelector('#popup-profile');
-const popupCloseButton = popupEditProfile.querySelector('.popup__close-button');
 const popupEditForm = popupEditProfile.querySelector('.popup__form');
+const popups = document.querySelectorAll('.popup');
 
 // Присваивание имени и описания в форму
 const popupProfileName = document.getElementById('name');
@@ -13,7 +13,6 @@ const profileStatus = document.querySelector('.profile__status');
 // Попап для добавления карточек
 const popupAddCardOpen = document.querySelector('.profile__add-button');
 const popupAddCard = document.querySelector('#popup-add');
-const popupAddCardClose = popupAddCard.querySelector('.popup__close-button');
 const popupAddCardForm = popupAddCard.querySelector('.popup__form');
 
 const newCardLink = document.getElementById('link');
@@ -28,26 +27,31 @@ const template = document.querySelector('.cards-template').content;
 const popupFullsize = document.querySelector('#popup-fullsize');
 const popupFullImg = popupFullsize.querySelector('.popup__full-img');
 const popupFullImgName = popupFullsize.querySelector('.popup__full-img-name');
-const popupFullClose = popupFullsize.querySelector('.popup__close-button');
 
 ///////////////////////////////////////////////////
 // Открытие закрытие попап
 function openPopup(element) {
   element.classList.add('popup_opened');
+  document.addEventListener('keydown', pressedEscape);
 }
 function closePopup(element) {
   element.classList.remove('popup_opened');
+  document.addEventListener('keydown', pressedEscape);
 }
+
+// Закрытие при нажатии Esc
+function pressedEscape(event) {
+  if (event.key === 'Escape') {
+    const popupOpened = document.querySelector('.popup_opened');
+    closePopup(popupOpened);
+  }
+};
 ////////////////////////////////////////////////////
 
 popupEditButton.addEventListener('click', () => {  // Открывает попап профиля, присваивая значения со страницы
   openPopup (popupEditProfile);
   popupProfileName.value = profileAuthor.textContent;
   popupProfileInfo.value = profileStatus.textContent;
-});
-
-popupCloseButton.addEventListener('click', () => {  // Закрывает попап профиля
-  closePopup (popupEditProfile);
 });
 
 /** Редактирование имени и информации профиля */
@@ -64,12 +68,6 @@ popupAddCardOpen.addEventListener('click', () => {  // Открытие попа
   openPopup (popupAddCard);
 });
 
-/** Закрывает попап добавления по крестику */
-function closeAddCardPopup() {
-  popupAddCardForm.reset();
-  closePopup (popupAddCard);
-}
-popupAddCardClose.addEventListener('click', closeAddCardPopup);
 
 popupAddCardForm.addEventListener('submit', (event) => {  // Создает карточку из формы добавления
   event.preventDefault(); 
@@ -79,7 +77,8 @@ popupAddCardForm.addEventListener('submit', (event) => {  // Создает ка
     link: newCardLink.value,
   });
 
-  closeAddCardPopup();
+  popupAddCardForm.reset();
+  closePopup (popupAddCard);
 });
 
 
@@ -135,9 +134,16 @@ function likeCard(event) {
   event.target.classList.toggle('card__like-button_active'); // Добавляет/удаляет класс Лайк
 }
 
-// Закрыть карточку
-popupFullClose.addEventListener('click', () => {
-  closePopup (popupFullsize);
-});
+// Закрытие попап кликом на оверлей и крестик
+popups.forEach( popup => {
+  popup.addEventListener('mousedown', (event) => {
+    if (event.target.classList.contains('popup_opened')) {
+      closePopup(popup);
+    }
+    if (event.target.classList.contains('popup__close-button')) {
+      closePopup(popup);
+    }
+  })
+})
 
 render(initialCards); // Передаем массив

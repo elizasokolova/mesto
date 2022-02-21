@@ -22,8 +22,19 @@ function enableValidation (config) {
  * @param {ValidationConfig} config 
  */
 function enableFormValidation (form, config) {
-    //formElement.checkValidity()
-    
+    const button = form.querySelector(config.submitButtonSelector);
+    toggleButtonState(button, form.checkValidity(), config);
+
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        toggleButtonState(button, form.checkValidity(), config);
+    });
+
+    const inputs = form.querySelectorAll(config.inputSelector);
+    inputs.forEach(element => element.addEventListener('input', () => {
+        toggleButtonState(button, form.checkValidity(), config);
+        toggleInputState(form, element, config);
+    }));
 }
 
 /**
@@ -43,11 +54,44 @@ function toggleButtonState (button, isEnabled, config) {
     }
 }
 
+/**
+ * Меняет вид поля ввода по проверке валидности
+ * @param {HTMLFormElement} form
+ * @param {HTMLInputElement} input
+ * @param {ValidationConfig} config
+ */
+function toggleInputState (form, input, config) {
+    if (input.checkValidity()) {
+        hideInputError(form, input, config);
+    }
+    else {
+        showInputError(form, input, config);
+    }
+}
 
+/**
+ * Показывает браузерное сообщение об ошибке в нужное поле
+ * @param {HTMLFormElement} form
+ * @param {HTMLInputElement} input
+ * @param {ValidationConfig} config
+ */
+function showInputError (form, input, config) {
+    input.classList.add(config.inputErrorClass);
+    const errorMessage = form.querySelector(`#popup__${input.id}-error`);
+    errorMessage.textContent = input.validationMessage;
+}
 
-
-
-
+/**
+ * Скрывает сообщение об ошибке
+ * @param {HTMLFormElement} form
+ * @param {HTMLInputElement} input
+ * @param {ValidationConfig} config
+ */
+function hideInputError (form, input, config) {
+    input.classList.remove(config.inputErrorClass);
+    const errorMessage = form.querySelector(`#popup__${input.id}-error`);
+    errorMessage.textContent = '';
+}
 
 // Запускаем валидацию
 enableValidation({
