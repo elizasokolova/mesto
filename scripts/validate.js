@@ -26,8 +26,7 @@ function enableFormValidation (form, config) {
     toggleButtonState(button, form.checkValidity(), config);
 
     form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        toggleButtonState(button, form.checkValidity(), config);
+        event.preventDefault(); 
     });
 
     const inputs = form.querySelectorAll(config.inputSelector);
@@ -45,12 +44,12 @@ function enableFormValidation (form, config) {
  */
 function toggleButtonState (button, isEnabled, config) {
     if (isEnabled) {
-        button.disabled = false;
         button.classList.remove(config.inactiveButtonClass);
+        button.disabled = false;
     }
     else {
-        button.disabled = true;
         button.classList.add(config.inactiveButtonClass);
+        button.disabled = true;
     }
 }
 
@@ -79,6 +78,7 @@ function showInputError (form, input, config) {
     input.classList.add(config.inputErrorClass);
     const errorMessage = form.querySelector(`#popup__${input.id}-error`);
     errorMessage.textContent = input.validationMessage;
+    errorMessage.classList.add(config.errorClass);
 }
 
 /**
@@ -91,6 +91,7 @@ function hideInputError (form, input, config) {
     input.classList.remove(config.inputErrorClass);
     const errorMessage = form.querySelector(`#popup__${input.id}-error`);
     errorMessage.textContent = '';
+    errorMessage.classList.remove(config.errorClass);
 }
 
 // Запускаем валидацию
@@ -100,4 +101,5 @@ enableValidation({
     submitButtonSelector: '.popup__save-button',  // Кнопка сохранить
     inputErrorClass: 'popup__edit-area_invalid',  // Подчеркивание красным
     inactiveButtonClass: 'popup__save-button_invalid', // Блокировка кнопки Сохранить
+    errorClass: 'popup__error_visible' // Видимость поля с ошибкой
 });

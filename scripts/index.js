@@ -36,7 +36,7 @@ function openPopup(element) {
 }
 function closePopup(element) {
   element.classList.remove('popup_opened');
-  document.addEventListener('keydown', pressedEscape);
+  document.removeEventListener('keydown', pressedEscape);
 }
 
 // Закрытие при нажатии Esc
@@ -44,6 +44,7 @@ function pressedEscape(event) {
   if (event.key === 'Escape') {
     const popupOpened = document.querySelector('.popup_opened');
     closePopup(popupOpened);
+    popupAddCardForm.reset();
   }
 };
 ////////////////////////////////////////////////////
@@ -67,7 +68,6 @@ popupEditForm.addEventListener('submit', redactProfileInfo); // Отправля
 popupAddCardOpen.addEventListener('click', () => {  // Открытие попапа добавления карты
   openPopup (popupAddCard);
 });
-
 
 popupAddCardForm.addEventListener('submit', (event) => {  // Создает карточку из формы добавления
   event.preventDefault(); 
@@ -137,10 +137,7 @@ function likeCard(event) {
 // Закрытие попап кликом на оверлей и крестик
 popups.forEach( popup => {
   popup.addEventListener('mousedown', (event) => {
-    if (event.target.classList.contains('popup_opened')) {
-      closePopup(popup);
-    }
-    if (event.target.classList.contains('popup__close-button')) {
+    if (event.target.classList.contains('popup_opened') || event.target.classList.contains('popup__close-button')) {
       closePopup(popup);
     }
   })
