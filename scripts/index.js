@@ -20,7 +20,6 @@ const newCardTitle = document.getElementById('title');
 
 // Массив карточек выведение
 const photoGrid = document.querySelector('.photo-grid');
-const page = document.querySelector('.page');
 const template = document.querySelector('.cards-template').content;
 
 // Открытие полноразмерной карточки
@@ -30,12 +29,20 @@ const popupFullImgName = popupFullsize.querySelector('.popup__full-img-name');
 
 ///////////////////////////////////////////////////
 // Открытие закрытие попап
-function openPopup(element) {
-  element.classList.add('popup_opened');
+function openPopup(popup) {
+  popup.classList.add('popup_opened');
   document.addEventListener('keydown', pressedEscape);
+
+  const form = popup.querySelector('.popup__form');
+  form.dispatchEvent(new Event('openForm'));
 }
-function closePopup(element) {
-  element.classList.remove('popup_opened');
+
+function closePopup(popup) {
+  popup.classList.remove('popup_opened');
+
+  const form = popup.querySelector('.popup__form');
+  form.reset();
+
   document.removeEventListener('keydown', pressedEscape);
 }
 
@@ -44,9 +51,8 @@ function pressedEscape(event) {
   if (event.key === 'Escape') {
     const popupOpened = document.querySelector('.popup_opened');
     closePopup(popupOpened);
-    popupAddCardForm.reset();
   }
-};
+}
 ////////////////////////////////////////////////////
 
 popupEditButton.addEventListener('click', () => {  // Открывает попап профиля, присваивая значения со страницы
@@ -66,7 +72,7 @@ popupEditForm.addEventListener('submit', redactProfileInfo); // Отправля
 ///////////////////////////////////////////////////////
 // Создание новой карты
 popupAddCardOpen.addEventListener('click', () => {  // Открытие попапа добавления карты
-  openPopup (popupAddCard);
+  openPopup(popupAddCard);
 });
 
 popupAddCardForm.addEventListener('submit', (event) => {  // Создает карточку из формы добавления
@@ -77,8 +83,7 @@ popupAddCardForm.addEventListener('submit', (event) => {  // Создает ка
     link: newCardLink.value,
   });
 
-  popupAddCardForm.reset();
-  closePopup (popupAddCard);
+  closePopup(popupAddCard);
 });
 
 
@@ -123,7 +128,7 @@ function openImage(event) {  // Открывает карточку, присв�
     popupFullImg.src = event.target.src;
     popupFullImg.alt = event.target.alt;
     popupFullImgName.textContent = event.target.alt;
-    openPopup (popupFullsize);
+    openPopup(popupFullsize);
 }
 
 function deleteCard(event) {

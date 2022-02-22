@@ -5,6 +5,7 @@
  * @property {string} submitButtonSelector
  * @property {string} inputErrorClass
  * @property {string} inactiveButtonClass
+ * @property {string} errorClass
  */
 
 /**
@@ -25,11 +26,13 @@ function enableFormValidation (form, config) {
     const button = form.querySelector(config.submitButtonSelector);
     toggleButtonState(button, form.checkValidity(), config);
 
-    form.addEventListener('submit', (event) => {
-        event.preventDefault(); 
+    const inputs = form.querySelectorAll(config.inputSelector);
+
+    form.addEventListener('openForm', () => {
+        inputs.forEach(input => hideInputError(form, input, config));
+        toggleButtonState(button, form.checkValidity(), config);
     });
 
-    const inputs = form.querySelectorAll(config.inputSelector);
     inputs.forEach(element => element.addEventListener('input', () => {
         toggleButtonState(button, form.checkValidity(), config);
         toggleInputState(form, element, config);
