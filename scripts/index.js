@@ -1,3 +1,11 @@
+import {FormValidator} from './FormValidator.js';
+import {initialCards} from './data.js';
+import {Card} from './Card.js';
+import {
+  openPopup,
+  closePopup,
+} from './utils.js';
+
 // Открытие и закрытие формы Popup
 const popupEditButton = document.querySelector('.profile__edit-button');
 const popupEditProfile = document.querySelector('#popup-profile');
@@ -20,43 +28,9 @@ const newCardTitle = document.getElementById('title');
 
 // Массив карточек выведение
 const photoGrid = document.querySelector('.photo-grid');
-const template = document.querySelector('.cards-template').content;
-
-// Открытие полноразмерной карточки
-const popupFullsize = document.querySelector('#popup-fullsize');
-const popupFullImg = popupFullsize.querySelector('.popup__full-img');
-const popupFullImgName = popupFullsize.querySelector('.popup__full-img-name');
-
-///////////////////////////////////////////////////
-// Открытие закрытие попап
-function openPopup(popup) {
-  popup.classList.add('popup_opened');
-  document.addEventListener('keydown', pressedEscape);
-
-  const form = popup.querySelector('.popup__form');
-  form.dispatchEvent(new Event('openForm'));
-}
-
-function closePopup(popup) {
-  popup.classList.remove('popup_opened');
-
-  const form = popup.querySelector('.popup__form');
-  form.reset();
-
-  document.removeEventListener('keydown', pressedEscape);
-}
-
-// Закрытие при нажатии Esc
-function pressedEscape(event) {
-  if (event.key === 'Escape') {
-    const popupOpened = document.querySelector('.popup_opened');
-    closePopup(popupOpened);
-  }
-}
-////////////////////////////////////////////////////
 
 popupEditButton.addEventListener('click', () => {  // Открывает попап профиля, присваивая значения со страницы
-  openPopup (popupEditProfile);
+  openPopup(popupEditProfile);
   popupProfileName.value = profileAuthor.textContent;
   popupProfileInfo.value = profileStatus.textContent;
 });
@@ -82,61 +56,17 @@ popupAddCardForm.addEventListener('submit', (event) => {  // Создает ка
     name: newCardTitle.value,
     link: newCardLink.value,
   });
-
   closePopup(popupAddCard);
 });
 
-
 // Добавление карточки
-function render(item) {   // Передаем сюда массив, forEach выполняет функцию для каждого элемента
-  item.forEach(renderItem);
+function render(items) {   // Передаем сюда массив, forEach выполняет функцию для каждого элемента
+  items.forEach(renderItem);
 }
 
-function renderItem(item) {  // Добавляем карточку в сетку, передавая значение от функции CreateCard
-  const addCard = createCard(item);
-  photoGrid.prepend(addCard);
-}
-
-/** Создает карту из массива */
-function createCard(item) { 
-
-  const card = template.querySelector('.card').cloneNode(true); // Склонирует все элементы массива
-
-  const cardTitle = card.querySelector('.card__title');
-  const cardImage = card.querySelector('.card__image');
-
-  cardImage.src = item.link;
-  cardTitle.textContent = item.name;
-  cardImage.alt = item.name;
-
-  addListeners(card);
-  
-  return card; //Возвращаем в функцию RenderItem
-}
-
-function addListeners(card) {
-  const deleteButton = card.querySelector('.card__delete-button');
-  const likeButton = card.querySelector('.card__like-button');
-  const cardImage = card.querySelector('.card__image');
-
-  deleteButton.addEventListener('click', deleteCard);
-  likeButton.addEventListener('click', likeCard);
-  cardImage.addEventListener('click', openImage);
-}
-
-function openImage(event) {  // Открывает карточку, присваивая ей значения полученного при нажатии элемента
-    popupFullImg.src = event.target.src;
-    popupFullImg.alt = event.target.alt;
-    popupFullImgName.textContent = event.target.alt;
-    openPopup(popupFullsize);
-}
-
-function deleteCard(event) {
-  event.target.closest('.card').remove();  // Удаляет ближайший элемент с таким классом
-}
-
-function likeCard(event) {
-  event.target.classList.toggle('card__like-button_active'); // Добавляет/удаляет класс Лайк
+function renderItem (item) {  // Добавляем карточку в сетку, передавая значение от функции CreateCard
+  const card = new Card(item, '.cards-template');
+  photoGrid.prepend(card.createCard());
 }
 
 // Закрытие попап кликом на оверлей и крестик
@@ -149,3 +79,17 @@ popups.forEach( popup => {
 })
 
 render(initialCards); // Передаем массив
+
+const validationConfig = {
+  inputSelector: '.popup__edit-area',   // Поле ввода
+  submitButtonSelector: '.popup__save-button',  // Кнопка сохранить
+  inputErrorClass: 'popup__edit-area_invalid',  // Подчеркивание красным
+  inactiveButtonClass: 'popup__save-button_invalid', // Блокировка кнопки Сохранить
+  errorClass: 'popup__error_visible' // Видимость поля с ошибкой
+};
+
+const popupEditFormValidator = new FormValidator(validationConfig, popupEditForm);
+popupEditFormValidator.enableValidation();
+
+const popupAddCardFormValidator = new FormValidator(validationConfig, popupAddCardForm);
+popupAddCardFormValidator.enableValidation();
