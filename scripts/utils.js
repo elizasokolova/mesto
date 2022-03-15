@@ -2,18 +2,10 @@
 export function openPopup(popup) {
     popup.classList.add('popup_opened');
     document.addEventListener('keydown', pressedEscape);
-
-    // Если в попапе есть форма, то создать событие
-    const form = popup.querySelector('.popup__form');
-    form && form.dispatchEvent(new Event('openForm'));
 }
 
 export function closePopup(popup) {
     popup.classList.remove('popup_opened');
-
-    const form = popup.querySelector('.popup__form');
-    form && form.reset();
-
     document.removeEventListener('keydown', pressedEscape);
 }
 

@@ -1,5 +1,3 @@
-import {openPopup} from './utils.js';
-
 /**
  * @class Card
  */
@@ -8,11 +6,13 @@ export class Card {
      * @constructor
      * @param {{name:string, link:string}} data
      * @param {string} templateSelector
+     * @param {function(name:string, link:string)} handleCardClick
      */
-    constructor (data, templateSelector) {
+    constructor (data, templateSelector, handleCardClick) {
         this._name = data.name;
         this._link = data.link;
         this._template = document.querySelector(templateSelector).content;
+        this._handleCardClick = handleCardClick;
     }
 
     /**
@@ -20,32 +20,26 @@ export class Card {
      * @returns {HTMLElement}
      */
     createCard () {
-        const card = this._template.querySelector('.card').cloneNode(true);
+        this._card = this._template.querySelector('.card').cloneNode(true);
 
-        const cardTitle = card.querySelector('.card__title');
-        const cardImage = card.querySelector('.card__image');
+        this._cardTitle = this._card.querySelector('.card__title');
+        this._cardImage = this._card.querySelector('.card__image');
+        this._deleteButton = this._card.querySelector('.card__delete-button');
+        this._likeButton = this._card.querySelector('.card__like-button');
 
-        cardImage.src = this._link;
-        cardTitle.textContent = this._name;
-        cardImage.alt = this._name;
+        this._cardImage.src = this._link;
+        this._cardTitle.textContent = this._name;
+        this._cardImage.alt = this._name;
 
-        this._addListeners(card);
+        this._addListeners();
 
-        return card;
+        return this._card;
     }
 
-    /**
-     * @param {HTMLElement} card
-     * @private
-     */
-    _addListeners (card) {
-        const deleteButton = card.querySelector('.card__delete-button');
-        const likeButton = card.querySelector('.card__like-button');
-        const cardImage = card.querySelector('.card__image');
-
-        deleteButton.addEventListener('click', this._deleteCard);
-        likeButton.addEventListener('click', this._likeCard);
-        cardImage.addEventListener('click', this._openImage);
+    _addListeners () {
+        this._deleteButton.addEventListener('click', this._deleteCard);
+        this._likeButton.addEventListener('click', this._likeCard);
+        this._cardImage.addEventListener('click', this._openImage.bind(this));
     }
 
     /**
@@ -64,21 +58,14 @@ export class Card {
      */
     _likeCard (event) {
         event.target.classList.toggle('card__like-button_active');
+      // this._likeButton.classList.toggle('card__like-button_active');
     }
 
     /**
      * Открытие полноразмерной карточки
-     * @param {Event} event
      * @private
      */
-    _openImage (event) {
-        const popupFullsize = document.querySelector('#popup-fullsize');
-        const popupFullImg = popupFullsize.querySelector('.popup__full-img');
-        const popupFullImgName = popupFullsize.querySelector('.popup__full-img-name');
-
-        popupFullImg.src = event.target.src;
-        popupFullImg.alt = event.target.alt;
-        popupFullImgName.textContent = event.target.alt;
-        openPopup(popupFullsize);
+    _openImage () {
+      this._handleCardClick(this._name, this._link);
     }
 }

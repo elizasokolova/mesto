@@ -28,9 +28,13 @@ const newCardTitle = document.getElementById('title');
 
 // Массив карточек выведение
 const photoGrid = document.querySelector('.photo-grid');
+const popupFullsize = document.querySelector('#popup-fullsize');
+const popupFullImg = popupFullsize.querySelector('.popup__full-img');
+const popupFullImgName = popupFullsize.querySelector('.popup__full-img-name');
 
 popupEditButton.addEventListener('click', () => {  // Открывает попап профиля, присваивая значения со страницы
   openPopup(popupEditProfile);
+  popupEditForm.dispatchEvent(new Event('openForm'));
   popupProfileName.value = profileAuthor.textContent;
   popupProfileInfo.value = profileStatus.textContent;
 });
@@ -47,6 +51,8 @@ popupEditForm.addEventListener('submit', redactProfileInfo); // Отправля
 // Создание новой карты
 popupAddCardOpen.addEventListener('click', () => {  // Открытие попапа добавления карты
   openPopup(popupAddCard);
+
+  popupAddCardForm.dispatchEvent(new Event('openForm'));
 });
 
 popupAddCardForm.addEventListener('submit', (event) => {  // Создает карточку из формы добавления
@@ -56,8 +62,18 @@ popupAddCardForm.addEventListener('submit', (event) => {  // Создает ка
     name: newCardTitle.value,
     link: newCardLink.value,
   });
+
+  popupAddCardForm.reset();
   closePopup(popupAddCard);
 });
+
+// Открытие полноразмерной карточки
+function handleCardClick(name, link) {
+  popupFullImg.src = link;
+  popupFullImg.alt = name;
+  popupFullImgName.textContent = name;
+  openPopup(popupFullsize);
+}
 
 // Добавление карточки
 function render(items) {   // Передаем сюда массив, forEach выполняет функцию для каждого элемента
@@ -65,7 +81,7 @@ function render(items) {   // Передаем сюда массив, forEach в
 }
 
 function renderItem (item) {  // Добавляем карточку в сетку, передавая значение от функции CreateCard
-  const card = new Card(item, '.cards-template');
+  const card = new Card(item, '.cards-template', handleCardClick);
   photoGrid.prepend(card.createCard());
 }
 
@@ -88,8 +104,15 @@ const validationConfig = {
   errorClass: 'popup__error_visible' // Видимость поля с ошибкой
 };
 
-const popupEditFormValidator = new FormValidator(validationConfig, popupEditForm);
-popupEditFormValidator.enableValidation();
+const formValidators = {};
 
-const popupAddCardFormValidator = new FormValidator(validationConfig, popupAddCardForm);
-popupAddCardFormValidator.enableValidation();
+function enableValidation (config, forms) {
+  forms.forEach(form => {
+    const validator = new FormValidator(config, form);
+    validator.enableValidation();
+    const formName = form.getAttribute('name');
+    formValidators[formName] = validator;
+  })
+}
+
+enableValidation(validationConfig, [popupEditForm, popupAddCardForm]);
