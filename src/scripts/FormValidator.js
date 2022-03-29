@@ -10,7 +10,7 @@
 /**
  * @class FormValidator
  */
-export class FormValidator {
+export default class FormValidator {
     /**
      * @constructor
      * @param {ValidationConfig} config 

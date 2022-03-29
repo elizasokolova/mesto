@@ -1,7 +1,7 @@
 /**
  * @class Card
  */
-export class Card {
+export default class Card {
     /**
      * @constructor
      * @param {{name:string, link:string}} data
