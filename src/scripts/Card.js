@@ -2,6 +2,8 @@
  * @class Card
  */
 export default class Card {
+    static DEFAULT_IMAGE_URL = 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg';
+
     /**
      * @constructor
      * @param {{name:string, link:string}} data
@@ -40,6 +42,7 @@ export default class Card {
         this._deleteButton.addEventListener('click', this._deleteCard);
         this._likeButton.addEventListener('click', this._likeCard);
         this._cardImage.addEventListener('click', this._openImage.bind(this));
+        this._cardImage.addEventListener('error', this._onErrorLoadImage.bind(this));
     }
 
     /**
@@ -66,5 +69,15 @@ export default class Card {
      */
     _openImage () {
       this._handleCardClick(this._name, this._link);
+    }
+
+    /**
+     * Вставка заглушки при невалидной ссылке
+     * @param {Event} event
+     * @private
+     */
+    _onErrorLoadImage (event) {
+        event.preventDefault();
+        this._cardImage.src = Card.DEFAULT_IMAGE_URL;
     }
 }
