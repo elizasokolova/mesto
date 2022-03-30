@@ -58,7 +58,6 @@ export default class Card {
      */
     _likeCard (event) {
         event.target.classList.toggle('card__like-button_active');
-      // this._likeButton.classList.toggle('card__like-button_active');
     }
 
     /**

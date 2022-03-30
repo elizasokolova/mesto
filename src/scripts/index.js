@@ -23,8 +23,8 @@ const popupEditProfile = new PopupWithForm('#popup-profile', (data) => {
 
 // Открывает попап профиля, присваивая значения со страницы
 popupEditButton.addEventListener('click', () => {
-  popupEditProfile.open();
   popupEditProfile.setInputsValues(userInfo.getUserInfo());
+  popupEditProfile.open();
 });
 popupEditProfile.setEventListeners();
 
@@ -33,24 +33,29 @@ popupEditProfile.setEventListeners();
 const sectionCards = new Section({
   items: initialCards,
   renderer: (item) => {
-    const card = new Card(
-        item,
-        '.cards-template',
-        (name, link) => popupFullsize.open(name, link)
-    );
-    return card.createCard();
+      sectionCards.addItem(createCard(item));
   }
 }, '.photo-grid');
 
 sectionCards.renderItems();
 
+// Создает новую карту из объекта с данными
+function createCard (item) {
+  const card = new Card(
+      item,
+      '.cards-template',
+      (name, link) => popupFullsize.open(name, link)
+  );
+  return card.createCard();
+}
+
 // Попап для добавления карточек
 const popupAddCardOpen = document.querySelector('.profile__add-button');
 const popupAddCard = new PopupWithForm('#popup-add', (data) => {
-  sectionCards.addItem({
+  sectionCards.addItem(createCard({
     name: data.title,
     link: data.link,
-  });
+  }));
   popupAddCard.close();
 });
 
