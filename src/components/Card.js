@@ -2,8 +2,6 @@
  * @class Card
  */
 export default class Card {
-    static DEFAULT_IMAGE_URL = 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg';
-
     /**
      * @constructor
      * @param {{name:string, link:string}} data
@@ -78,6 +76,6 @@ export default class Card {
      */
     _onErrorLoadImage (event) {
         event.preventDefault();
-        this._cardImage.src = Card.DEFAULT_IMAGE_URL;
+        this._cardImage.src = this._cardImage.dataset['defaultSrc'];
     }
 }

@@ -2,7 +2,7 @@
   "name": "mesto",
   "version": "1.0.0",
   "description": "Cервис **Mesto** - интерактивная страница, куда можно добавлять фотографии, удалять их и ставить лайки.\n",
-  "main": "./src/scripts/index.js",
+  "main": "src/pages/index.js",
   "scripts": {
     "dev": "webpack serve",
     "build": "webpack --mode production"
