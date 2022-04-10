@@ -1,24 +1,38 @@
-import FormValidator from '../components/FormValidator.js';
-import initialCards from '../components/data.js';
-import Card from '../components/Card.js';
-import PopupWithImage from "../components/PopupWithImage.js";
-import UserInfo from "../components/UserInfo.js";
-import PopupWithForm from "../components/PopupWithForm.js";
-import Section from "../components/Section.js";
+import FormValidator from '../components/FormValidator';
+import initialCards from '../components/data';
+import Card from '../components/Card';
+import PopupWithImage from "../components/PopupWithImage";
+import UserInfo from "../components/UserInfo";
+import PopupWithForm from "../components/PopupWithForm";
+import Section from "../components/Section";
+import Api from "../components/Api";
 
 import './index.css';
+
+const api = new Api({
+  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-39',
+  headers: {
+    authorization: '6a5a6e79-9da9-4935-9ee4-fe9aaaefe451',
+    'Content-Type': 'application/json'
+  }
+});
+
+window.api = api;
 
 // Объект для получения/изменения инфы о пользователе
 const userInfo = new UserInfo({
   nameSelector: '.profile__author', // Задаем селекторы для элементов с именем/инфы пользователя
   infoSelector: '.profile__status',
+  avatarSelector: '.profile__avatar',
 });
 
 // Попап "изменения данных о пользователе"
 const popupEditButton = document.querySelector('.profile__edit-button');
 const popupEditProfile = new PopupWithForm('#popup-profile', (data) => {
-  userInfo.setUserInfo(data);
-  popupEditProfile.close();
+  api.updateCurrentUser(data).then(newUser => {
+    userInfo.setUserInfo(newUser);
+    popupEditProfile.close();
+  })
 });
 
 // Открывает попап профиля, присваивая значения со страницы
@@ -31,13 +45,11 @@ popupEditProfile.setEventListeners();
 
 // Добавление карточек в сетку
 const sectionCards = new Section({
-  items: initialCards,
   renderer: (item) => {
       sectionCards.addItem(createCard(item));
   }
 }, '.photo-grid');
-
-sectionCards.renderItems();
+api.getInitialCards().then(cards => cards.forEach(card => sectionCards.renderer(card)));
 
 // Создает новую карту из объекта с данными
 function createCard (item) {
@@ -87,3 +99,8 @@ function enableValidation (config, forms) {
 }
 
 enableValidation(validationConfig, [popupEditProfile.form, popupAddCard.form]);
+
+// Запросы на сервер
+api.getCurrentUser()
+    .then(data => userInfo.setUserInfo(data))
+    .catch(error => console.log(error))

@@ -12,13 +12,16 @@
 
     <main class="content">
         <section class="profile">
-            <img src="<%=require('./images/avatar.jpg')%>" alt ="Аватарка" class="profile__avatar">
+            <div class="profile__overlay">
+                <img src="<%=require('./images/avatar.jpg')%>" alt ="Аватарка" class="profile__avatar">
+                <button class="profile__avatar-button" type="button" aria-label="Изменить аватар"></button>
+            </div>
             <div class="profile__info">
                 <div class="profile__container">
-                    <h1 class="profile__author">Жак-Ив Кусто</h1>
+                    <h1 class="profile__author"></h1>
                     <button class="profile__edit-button" type="button" aria-label="Редактировать"></button>
                 </div>
-                <p class="profile__status">Исследователь океана</p>
+                <p class="profile__status"></p>
             </div>
             <button class="profile__add-button" type="button" aria-label="Добавить"></button>
         </section>
@@ -35,12 +38,12 @@
     <section class="popup" id="popup-profile">
         <div class="popup__container">
             <button class="popup__close-button" type="button" aria-label="Закрыть"></button>
+            <h2 class="popup__edit">Редактировать профиль</h2>
             <form name="popup_form-edit" class="popup__form" id="popup_form-edit">
-                <h2 class="popup__edit">Редактировать профиль</h2>
                 <input name="name" id="name" type="text" value minlength="2" maxlength="40" required placeholder="Имя" class="popup__edit-area">
                 <span class="popup__error" id="popup__name-error"></span>
-                <input name="info" id="info" type="text" value minlength="2" maxlength="200" required placeholder="Описание" class="popup__edit-area">
-                <span class="popup__error" id="popup__info-error"></span>
+                <input name="about" id="about" type="text" value minlength="2" maxlength="200" required placeholder="Описание" class="popup__edit-area">
+                <span class="popup__error" id="popup__about-error"></span>
                 <button class="popup__save-button" type="submit" aria-label="Сохранить">Сохранить</button> 
             </form>
         </div>
@@ -49,13 +52,33 @@
     <section class="popup" id="popup-add">
         <div class="popup__container">
             <button class="popup__close-button" type="button" aria-label="Закрыть"></button>
+            <h2 class="popup__edit">Новое место</h2>
             <form name="popup_form-add" class="popup__form" id="popup_form-add">
-                <h2 class="popup__edit">Новое место</h2>
                 <input name="title" id="title" type="text" value minlength="2" maxlength="30" required placeholder="Название" class="popup__edit-area">
                 <span class="popup__error" id="popup__title-error"></span>
                 <input name="link" id="link" type="url" value required placeholder="Ссылка на картинку" class="popup__edit-area">
                 <span class="popup__error" id="popup__link-error"></span>
                 <button class="popup__save-button" type="submit" aria-label="Сохранить">Создать</button> 
+            </form>
+        </div>
+    </section>
+
+    <section class="popup" id="popup-delete-card">
+        <div class="popup__container">
+            <button class="popup__close-button" type="button" aria-label="Закрыть"></button>
+            <h2 class="popup__edit">Вы уверены?</h2>
+            <button class="popup__delete-button" type="submit" aria-label="Удалить">Да</button>
+        </div>
+    </section>
+
+    <section class="popup" id="popup-change-avatar">
+        <div class="popup__container">
+            <button class="popup__close-button" type="button" aria-label="Закрыть"></button>
+            <h2 class="popup__edit">Обновить аватар</h2>
+            <form name="popup_form-change-avatar" class="popup__form" id="popup_form-change-avatar">
+                <input name="avatar" id="avatar" type="url" value required placeholder="Ссылка на аватар" class="popup__edit-area">
+                <span class="popup__error" id="popup__avatar-error"></span>
+                <button class="popup__save-button" type="submit" aria-label="Сохранить">Сохранить</button>
             </form>
         </div>
     </section>
@@ -71,9 +94,14 @@
     <template class ="cards-template">
         <article class="card">
             <img class="card__image" alt="Фотография" data-default-src="<%=require('./images/no-image.jpg')%>">
-            <h2 class="card__title"></h2>
-            <button type="button" class="card__like-button" aria-label="Лайк"></button>
-            <button type="button" class="card__delete-button" aria-label="Удалить"></button>
+            <div class="card__block">
+                <h2 class="card__title"></h2>
+                <div class="card__container-like">
+                    <button type="button" class="card__like-button" aria-label="Лайк"></button>
+                    <span class="card__sum-like">0</span>
+                </div>
+            </div>
+                <button type="button" class="card__delete-button" aria-label="Удалить"></button>
         </article>
     </template>
 </body>
