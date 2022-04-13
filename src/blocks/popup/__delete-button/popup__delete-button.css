@@ -5,8 +5,7 @@
     cursor: pointer;
     border: 0;
     width: 100%;
-    max-width: calc(100% - 72px);
-    margin: 0 auto 36px;
+    margin: 0 auto;
     min-height: 50px;
     font-weight: 400;
     font-size: 18px;

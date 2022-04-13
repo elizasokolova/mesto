@@ -4,15 +4,30 @@
 export default class Card {
     /**
      * @constructor
-     * @param {{name:string, link:string}} data
+     * @param {Object} data
      * @param {string} templateSelector
      * @param {function(name:string, link:string)} handleCardClick
+     * @param {function(id:string, element: HTMLElement)} handleCardDelete
+     * @param {function(id:string)} handleCardLike
      */
-    constructor (data, templateSelector, handleCardClick) {
+    constructor (
+        data,
+        templateSelector,
+        handleCardClick,
+        handleCardDelete,
+        handleCardLike,
+    ) {
         this._name = data.name;
         this._link = data.link;
+        this._likes = data.likes;
+        this._cardId = data._id;
+        this._userId = data.user._id;
+        this._ownerId = data.owner._id;
         this._template = document.querySelector(templateSelector).content;
         this._handleCardClick = handleCardClick;
+        this._handleCardDelete = handleCardDelete;
+        this._handleCardLike = handleCardLike;
+        this.isLiked = false;
     }
 
     /**
@@ -31,7 +46,11 @@ export default class Card {
         this._cardImage.src = this._link;
         this._cardTitle.textContent = this._name;
         this._cardImage.alt = this._name;
-        this._sumLike.textContent = 0;
+        this.setLikes(this._likes);
+
+        if (this._userId !== this._ownerId) {
+            this._deleteButton.style.display = 'none';
+        }
 
         this._addListeners();
 
@@ -39,28 +58,44 @@ export default class Card {
     }
 
     _addListeners () {
-        this._deleteButton.addEventListener('click', this._deleteCard);
-        this._likeButton.addEventListener('click', this._likeCard);
+        this._deleteButton.addEventListener('click', this._deleteCard.bind(this));
+        this._likeButton.addEventListener('click', this._likeCard.bind(this));
         this._cardImage.addEventListener('click', this._openImage.bind(this));
         this._cardImage.addEventListener('error', this._onErrorLoadImage.bind(this));
     }
 
     /**
      * Удаляет ближайший элемент с таким классом
-     * @param {Event} event
      * @private
      */
-    _deleteCard (event) {
-        event.target.closest('.card').remove();
+    _deleteCard () {
+        this._handleCardDelete(this._cardId, this._card);
     }
 
     /**
      * Добавляет/удаляет класс Лайк
-     * @param {Event} event
      * @private
      */
-    _likeCard (event) {
-        event.target.classList.toggle('card__like-button_active');
+    _likeCard () {
+        this._handleCardLike(this._cardId);
+    }
+
+    /**
+     * Устанавливает количество лайков для карточки
+     * @param {Array} likes
+     * @public
+     */
+    setLikes (likes) {
+        this._sumLike.textContent = likes.length;
+
+        this.isLiked = likes.some((like) => like._id === this._userId);
+
+        if (this.isLiked) {
+            this._likeButton.classList.add('card__like-button_active');
+        }
+        else {
+            this._likeButton.classList.remove('card__like-button_active');
+        }
     }
 
     /**

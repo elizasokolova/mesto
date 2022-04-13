@@ -13,7 +13,7 @@
     <main class="content">
         <section class="profile">
             <div class="profile__overlay">
-                <img src="<%=require('./images/avatar.jpg')%>" alt ="Аватарка" class="profile__avatar">
+                <img src="<%=require('./images/no-image.jpg')%>" alt ="Аватарка" class="profile__avatar">
                 <button class="profile__avatar-button" type="button" aria-label="Изменить аватар"></button>
             </div>
             <div class="profile__info">
@@ -67,7 +67,9 @@
         <div class="popup__container">
             <button class="popup__close-button" type="button" aria-label="Закрыть"></button>
             <h2 class="popup__edit">Вы уверены?</h2>
-            <button class="popup__delete-button" type="submit" aria-label="Удалить">Да</button>
+            <form name="popup_delete-card" class="popup__form">
+                <button class="popup__delete-button" type="submit" aria-label="Удалить">Да</button>
+            </form>
         </div>
     </section>
 
