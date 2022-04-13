@@ -4,7 +4,7 @@ export default class Api {
         this._headers = headers;
     }
 
-    _validate (response) {
+    _checkResponse (response) {
         if (response.ok) {
             return response.json();
         }
@@ -13,7 +13,7 @@ export default class Api {
 
     getCurrentUser() {
         return fetch(`${this._baseUrl}/users/me`, { headers: this._headers })
-            .then(this._validate);
+            .then(this._checkResponse);
     }
 
     updateCurrentUser(data) {
@@ -21,12 +21,12 @@ export default class Api {
             method: 'PATCH',
             headers: this._headers,
             body: JSON.stringify(data)
-        }).then(this._validate);
+        }).then(this._checkResponse);
     }
 
     getInitialCards() {
         return fetch(`${this._baseUrl}/cards`, {headers: this._headers})
-            .then(this._validate);
+            .then(this._checkResponse);
     }
 
     addNewCard(data) {
@@ -34,28 +34,28 @@ export default class Api {
             method: 'POST',
             headers: this._headers,
             body: JSON.stringify(data)
-        }).then(this._validate);
+        }).then(this._checkResponse);
     }
 
     deleteCard(id) {
         return fetch(`${this._baseUrl}/cards/${id}`,{
             method: 'DELETE',
             headers: this._headers,
-        }).then(this._validate);
+        }).then(this._checkResponse);
     }
 
     addLike(id) {
         return fetch(`${this._baseUrl}/cards/${id}/likes`,{
             method: 'PUT',
             headers: this._headers,
-        }).then(this._validate);
+        }).then(this._checkResponse);
     }
 
     deleteLike(id) {
         return fetch(`${this._baseUrl}/cards/${id}/likes`,{
             method: 'DELETE',
             headers: this._headers,
-        }).then(this._validate);
+        }).then(this._checkResponse);
     }
 
     changeAvatar(data) {
@@ -65,6 +65,6 @@ export default class Api {
             body: JSON.stringify({
                 avatar: data['avatar'],
             })
-        }).then(this._validate);
+        }).then(this._checkResponse);
     }
 }
