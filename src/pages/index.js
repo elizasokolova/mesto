@@ -31,7 +31,7 @@ const userInfo = new UserInfo({
 });
 
 // Попап "изменения данных о пользователе"
-const popupEditProfile = new PopupWithForm('#popup-profile', (data) => {
+const popupEditProfile = new PopupWithForm('#popup-edit', (data) => {
     popupEditProfile.renderLoading(true);
     api.updateCurrentUser(data).then(newUser => {
         userInfo.setUserInfo(newUser);
